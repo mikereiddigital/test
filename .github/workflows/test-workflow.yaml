@@ -1,0 +1,22 @@
+name: Test
+
+
+on:
+  schedule:
+    - cron: ${{ env.CRON }}
+
+env:
+  CRON:  '40 9 * * *'
+
+jobs:
+
+  stop-start-instances:
+ 
+    runs-on: ubuntu-latest
+
+    steps:
+  
+      - name: Test
+        if: ${{ github.event.schedule }} == $CRON
+        run: |
+          echo "It works"
