@@ -3,7 +3,11 @@ name: Test
 
 on:
   schedule:
-    - cron: '45 10 * * *'
+    - cron: '00 11 * * *'
+    - cron: '05 11 * * *'
+    - cron: '10 11 * * *'
+    - cron: '15 11 * * *'
+
 
 jobs:
 
@@ -14,7 +18,9 @@ jobs:
     steps:
   
       - name: Test
-        run: echo "It works"
+        run: |
+          echo github.event.schedule
+        
       - name: Every time
         run: |
           echo "This step will always run"
