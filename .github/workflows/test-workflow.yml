@@ -3,10 +3,10 @@ name: Test
 
 on:
   schedule:
-    - cron: "3 10 * * *"
+    - cron: '*/15 * * * *'
 
 env:
-  CRON:  '3 10 * * *'
+  CRON:  '*/15 * * * *'
 
 jobs:
 
