@@ -3,7 +3,7 @@ name: Test
 
 on:
   schedule:
-    - cron: '00 13 * * *'
+    - cron: '15 13 * * *'
 
 jobs:
 
@@ -13,9 +13,10 @@ jobs:
 
     steps:
   
+      - name: init
+        run: echo $(date +%x_%r)
+
       - name: Test
-        if: ${{ github.event.schedule }} == '00 13 * * *'
+        if: github.event.schedule == '15 13 * * *'
         run: |
           echo ${{ github.event.schedule }}
-          echo $(date +%x_%r)
-        
