@@ -6,7 +6,7 @@ on:
     - cron: '*/5 * * * *'
 
 env:
-  CRON:  '*/5 * * * *'
+  CRON-TIME:  '*/5 * * * *'
 
 jobs:
 
@@ -17,5 +17,6 @@ jobs:
     steps:
   
       - name: Test
+        if: ${{ github.event.schedule }} == $CRON-TIME
         run: |
           echo "It works"
