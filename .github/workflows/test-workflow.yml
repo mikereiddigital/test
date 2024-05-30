@@ -3,7 +3,7 @@ name: Test
 
 on:
   schedule:
-    - cron: '55 9 * * *'
+    - cron: '*/5 * * * *'
 
 jobs:
 
@@ -14,7 +14,7 @@ jobs:
     steps:
   
       - name: Test
-        if: github.event.schedule == '55 9 * * *'
+        if: github.event.schedule == '*/5 * * * *'
         run: echo "It works"
       - name: Every time
         run: echo "This step will always run"
