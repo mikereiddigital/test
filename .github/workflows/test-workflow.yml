@@ -3,11 +3,11 @@ name: Test
 
 on:
   schedule:
-    - cron: '30 10 * * *'
+    - cron: '35 10 * * *'
 
 jobs:
 
-  job-1:
+  job-2:
  
     runs-on: ubuntu-latest
 
@@ -16,4 +16,6 @@ jobs:
       - name: Test
         run: echo "It works"
       - name: Every time
-        run: echo "This step will always run"
+        run: |
+          echo "This step will always run"
+          echo $(date +%x_%r)
