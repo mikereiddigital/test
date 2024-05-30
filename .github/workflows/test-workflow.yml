@@ -20,8 +20,5 @@ jobs:
       - name: Test
         run: |
           echo ${{ github.event.schedule }}
-        
-      - name: Every time
-        run: |
-          echo "This step will always run"
           echo $(date +%x_%r)
+        
