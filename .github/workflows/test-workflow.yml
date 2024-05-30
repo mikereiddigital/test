@@ -3,7 +3,7 @@ name: Test
 
 on:
   schedule:
-    - cron: '35 10 * * *'
+    - cron: '45 10 * * *'
 
 jobs:
 
