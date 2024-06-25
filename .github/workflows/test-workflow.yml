@@ -28,4 +28,4 @@ jobs:
       - name: test
         run: |
           echo "::add-mask::$ACCOUNT_NUMBER"
-          echo ACCOUNT_NUMBER = $ACCOUNT_NUMBER >> $GITHUB_ENV
+          echo "ACCOUNT_NUMBER=$ACCOUNT_NUMBER" >> $GITHUB_ENV
