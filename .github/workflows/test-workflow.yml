@@ -8,12 +8,9 @@ on:
   schedule:
     - cron: '09 15 * * *'
 
-env:
-  ACCOUNT_NUMBER: "1234567890"
-
 jobs:
 
-  job-2:
+  job-1:
  
     runs-on: ubuntu-latest
 
@@ -27,5 +24,6 @@ jobs:
 
       - name: test
         run: |
+          ACCOUNT_NUMBER="1234567890"
           echo "::add-mask::$ACCOUNT_NUMBER"
-          echo "ACCOUNT_NUMBER=$ACCOUNT_NUMBER" >> $GITHUB_ENV
+          echo "ACCOUNT_NUMBER=${ACCOUNT_NUMBER}" >> $GITHUB_ENV
