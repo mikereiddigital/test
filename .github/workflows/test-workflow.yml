@@ -22,6 +22,9 @@ jobs:
       - name: init
         if: github.event.schedule == '09 15 * * *'
         run: |
-          echo ${{ github.env.ACCOUNT_NUNBER}}
           echo $(date +%x_%r)
           echo ${{ github.event.schedule }}
+
+      - name: test
+        run: |
+          echo ${{ github.env.ACCOUNT_NUNBER}}
