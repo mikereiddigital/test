@@ -9,7 +9,7 @@ on:
     - cron: '09 15 * * *'
 
 env:
-  THIS_NAME = "A Test"
+  THIS_NAME: "A Test"
 
 jobs:
 
