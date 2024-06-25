@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '09 15 * * *'
 
+env:
+  ACCOUNT_NUMBER: "1234567890"
+
 jobs:
 
   job-2:
@@ -16,5 +19,6 @@ jobs:
       - name: init
         if: github.event.schedule == '09 15 * * *'
         run: |
+          echo ${{ github.env.ACCOUNT_NUNBER}}
           echo $(date +%x_%r)
           echo ${{ github.event.schedule }}
