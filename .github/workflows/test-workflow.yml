@@ -9,7 +9,7 @@ on:
     - cron: '09 15 * * *'
 
 env:
-  ACCOUNT_NUMBER: "1234567890"
+  ACCOUNT_NUMBER: ::add-mask::"1234567890"
 
 jobs:
 
@@ -27,5 +27,4 @@ jobs:
 
       - name: test
         run: |
-          echo "::add-mask::$ACCOUNT_NUMBER"
           echo ${{ github.env.ACCOUNT_NUNBER}}
