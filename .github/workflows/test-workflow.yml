@@ -26,18 +26,15 @@ jobs:
           echo ${{ github.event.schedule }}
 
       - name: test
-        id: set-variable
         run: |
           echo $THIS_NAME
           ACCOUNT_NUMBER="1234567890"
           echo ${ACCOUNT_NUMBER}
           echo "::add-mask::$ACCOUNT_NUMBER"
           echo "ACCOUNT_NUMBER=${ACCOUNT_NUMBER}" >> $GITHUB_ENV
-          echo "::set-output name=value::$ACCOUNT_NUMBER"
-
 
       - name: test2
-        if: steps.set-variable.outputs.value != '1234567890'
+        if: env.ACCOUNT_NUMBER == '1234567890'
         run: |
          echo 'it works'
 
