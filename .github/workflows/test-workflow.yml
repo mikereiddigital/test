@@ -36,6 +36,6 @@ jobs:
       - name: test2
         run: |
           echo $THIS_NAME
-          ACCOUNT_NUMBER2="1234567890"
+          ACCOUNT_NUMBER2="ABCDEFGHIJK"
           echo "ACCOUNT_NUMBER2=${ACCOUNT_NUMBER2}" >> $GITHUB_ENV
           echo ${ACCOUNT_NUMBER2}
