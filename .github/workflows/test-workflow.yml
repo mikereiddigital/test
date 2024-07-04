@@ -34,8 +34,8 @@ jobs:
       - name: test1
         run: |
           ls -ltr
-          chmod 700 ../scripts/test.sh
-          false | ../scripts/test.sh
+          chmod 700 scripts/test.sh
+          false | scripts/test.sh
 
       - name: test
         run: |
