@@ -36,6 +36,7 @@ jobs:
           ls -ltr
           chmod 700 scripts/test.sh
           false | scripts/test.sh
+          exit ${PIPESTATUS[0]}
 
       - name: test
         run: |
