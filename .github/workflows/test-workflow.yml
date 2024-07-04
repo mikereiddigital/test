@@ -25,6 +25,10 @@ jobs:
           echo $(date +%x_%r)
           echo ${{ github.event.schedule }}
 
+      - name: test1
+        run: |
+          false
+
       - name: test
         run: |
           echo $THIS_NAME
