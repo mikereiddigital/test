@@ -27,6 +27,12 @@ jobs:
       - name: Setup git
         run: echo ${{ github.head_ref || github.ref_name }}
 
+      - name: Create a change
+        working-directory: code
+        run: |
+          echo "Another change " >> test.txt
+          git add test.txt
+
       # Run steps that make changes to the local repo here.
 
       # Commit all changed files back to the repository
