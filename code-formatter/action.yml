@@ -43,7 +43,7 @@ runs:
         pwd
         ls -ltra
         echo "Another change " >> /home/runner/work/test2/test2/code/test.txt
-        git add test.txt
+        git add .
       shell: bash
 
     # Run steps that make changes to the local repo here.
