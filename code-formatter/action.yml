@@ -38,7 +38,7 @@ runs:
 
     - name: Create a change
       run: |
-        cd .
+        pwd
         ls -l
         echo "Another change " >> ./code/test.txt
         git add test.txt
