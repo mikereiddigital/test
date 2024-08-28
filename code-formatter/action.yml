@@ -42,9 +42,6 @@ runs:
       run: |
         pwd
         ls -ltra
-        cd .git
-        pwd
-        ls -ltra
         echo "Another change " >> /home/runner/work/test2/test2/code/test.txt
         git add test.txt
       shell: bash
