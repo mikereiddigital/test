@@ -37,9 +37,8 @@ runs:
       shell: bash
 
     - name: Create a change
-      working-directory: code
       run: |
-        echo "Another change " >> test.txt
+        echo "Another change " >> /code/test.txt
         git add test.txt
       shell: bash
 
