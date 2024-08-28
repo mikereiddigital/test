@@ -40,7 +40,10 @@ runs:
     - name: Create a change
       run: |
         pwd
-        ls -ltra       
+        ls -ltra
+        cd .git
+        pwd
+        ls -ltra
         echo "Another change " >> ./code/test.txt
         git add test.txt
       shell: bash
