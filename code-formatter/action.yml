@@ -5,6 +5,9 @@ inputs:
     description: "Files to ignore"
     required: false
     default: ""
+  secret-token:
+    description: "Required value of GITHUB_TOKEN"
+    required: true
     
 runs:
   using: "composite"
@@ -49,4 +52,4 @@ runs:
         repo: ${{ github.repository }}
         branch: ${{ github.head_ref || github.ref_name }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.secret-token }}
