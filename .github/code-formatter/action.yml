@@ -1,0 +1,50 @@
+name: "Code-Formatter"
+description: "Format Ruby, Terraform, YAML/YML, Python, Markdown, JSON and html.md.erb files within a PR"
+inputs:
+  ignore-files:
+    description: "Files to ignore"
+    required: false
+    default: ""
+    
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      with:
+        repository: ${{ github.repository }}
+
+    - name: Check Branch exists and is not a fork.
+      id: branch-exists
+      run: |
+        git fetch origin
+        branch_name=${{ github.head_ref }}
+        if [[ $( git rev-parse --verify origin/$branch_name ) ]]; then
+          echo "result=$((0))" >> ${GITHUB_OUTPUT}
+        else
+          echo "Warning: Cannot code-format a forked branch or cannot find the branch!"
+          echo $branch_name
+          echo "Finished: no Code Formatter changes."
+          echo "result=$((1))" >> ${GITHUB_OUTPUT}
+        fi
+      shell: bash
+
+
+    - name: Setup git
+      run: echo ${{ github.head_ref || github.ref_name }}
+
+    - name: Create a change
+      working-directory: code
+      run: |
+        echo "Another change " >> test.txt
+        git add test.txt
+
+    # Run steps that make changes to the local repo here.
+
+    # Commit all changed files back to the repository
+    - uses: planetscale/ghcommit-action@v0.1.6
+      with:
+        commit_message: "🤖 fmt"
+        repo: ${{ github.repository }}
+        branch: ${{ github.head_ref || github.ref_name }}
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
