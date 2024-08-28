@@ -31,6 +31,7 @@ runs:
 
     - name: Setup git
       run: echo ${{ github.head_ref || github.ref_name }}
+      shell: bash
 
     - name: Create a change
       working-directory: code
