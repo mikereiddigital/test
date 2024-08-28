@@ -42,7 +42,7 @@ runs:
         pwd
         cd ..
         pwd
-        ls -l
+        ls -R /home/runner/work/test2/test2        
         echo "Another change " >> ./code/test.txt
         git add test.txt
       shell: bash
