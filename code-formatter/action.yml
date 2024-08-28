@@ -42,9 +42,6 @@ runs:
       run: |
         pwd
         ls -ltra
-        cd HEAD
-        ls -ltra
-        cd ..
         cd .git
         pwd
         ls -ltra
