@@ -45,7 +45,7 @@ runs:
         cd .git
         pwd
         ls -ltra
-        echo "Another change " >> ./code/test.txt
+        echo "Another change " >> code/test.txt
         git add test.txt
       shell: bash
 
