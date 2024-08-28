@@ -37,6 +37,7 @@ runs:
       run: |
         echo "Another change " >> test.txt
         git add test.txt
+      shell: bash
 
     # Run steps that make changes to the local repo here.
 
