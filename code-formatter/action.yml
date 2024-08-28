@@ -22,6 +22,7 @@ runs:
         git fetch origin
         branch_name=${{ github.head_ref }}
         if [[ $( git rev-parse --verify origin/$branch_name ) ]]; then
+          echo $branch_name
           echo "result=$((0))" >> ${GITHUB_OUTPUT}
         else
           echo "Warning: Cannot code-format a forked branch or cannot find the branch!"
@@ -38,6 +39,8 @@ runs:
 
     - name: Create a change
       run: |
+        pwd
+        cd ..
         pwd
         ls -l
         echo "Another change " >> ./code/test.txt
