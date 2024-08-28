@@ -38,6 +38,8 @@ runs:
 
     - name: Create a change
       run: |
+        cd .
+        ls -ltra
         echo "Another change " >> ./code/test.txt
         git add test.txt
       shell: bash
