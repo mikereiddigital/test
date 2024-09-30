@@ -275,7 +275,7 @@ runs:
                 variables: {
                   input: {
                     branch: {
-                      repositoryNameWithOwner: "mikereiddigital/$repo",
+                      repositoryNameWithOwner: "mikereiddigital/test2",
                       branchName: $branch_name
                     },
                     message: {
