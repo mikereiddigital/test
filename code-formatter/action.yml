@@ -260,6 +260,8 @@ runs:
 
             # Get the Repo Name
             repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+            echo "The repo name is "
+            echo $repo
 
             # Prepare the mutation payload
             mutation_payload=$(jq -n \
