@@ -234,12 +234,14 @@ runs:
             cat files_for_commit.json  # Check the contents for validity
 
             # Error handling for `jq` output
+            echo "Validate json"
             if ! jq . files_for_commit.json; then
               echo "Error reading files_for_commit.json"
               exit 1
             fi
 
             # Validate the JSON before proceeding
+            echo "Check for empty json"
             if ! jq empty files_for_commit.json; then
               echo "Invalid JSON in files_for_commit.json"
               exit 1
