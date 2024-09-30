@@ -205,7 +205,7 @@ runs:
 
             # Get the amended file names and save them.
             git diff --staged --name-only > changed_files.txt
-            echo "List Files"
+            echo "List files amended by formatter"
             cat changed_files.txt
 
             commit_oid=$(git rev-parse HEAD)
@@ -228,9 +228,6 @@ runs:
                 '.additions += [{ "path": $path, "contents": $content }]')
               fi
             done < changed_files.txt
-
-            commit_message="Commit changes made by code formatters"
-            files_for_commit="$(cat files_for_commit.json)"
             
             # Error handling for `jq` output
             if ! jq . files_for_commit.json; then
@@ -252,6 +249,8 @@ runs:
             repo=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
             echo "The repo name is "
             echo $repo
+
+            commit_message="Commit changes made by code formatters"
 
             # Prepare the mutation payload
             mutation_payload=$(jq -n \
