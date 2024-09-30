@@ -273,7 +273,7 @@ runs:
                 variables: {
                   input: {
                     branch: {
-                      repositoryNameWithOwner: "ministryofjustice/$repo",
+                      repositoryNameWithOwner: "mikereiddigital/$repo",
                       branchName: $branch_name
                     },
                     message: {
