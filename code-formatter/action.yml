@@ -228,16 +228,16 @@ runs:
                 '.additions += [{ "path": $path, "contents": $content }]')
               fi
             done < changed_files.txt
-            
+
+            # Output the final JSON array
+            echo "$files_for_commit" > files_for_commit.json
+            cat files_for_commit.json  # Check the contents for validity
+
             # Error handling for `jq` output
             if ! jq . files_for_commit.json; then
               echo "Error reading files_for_commit.json"
               exit 1
             fi
-
-            # Output the final JSON array
-            echo "$files_for_commit" > files_for_commit.json
-            cat files_for_commit.json  # Check the contents for validity
 
             # Validate the JSON before proceeding
             if ! jq empty files_for_commit.json; then
