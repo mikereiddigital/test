@@ -229,16 +229,6 @@ runs:
               fi
             done < changed_files.txt
 
-            # Output the final JSON array
-            echo "$files_for_commit" > files_for_commit.json
-            cat files_for_commit.json
-            
-            # Error handling for `jq` output
-            if ! jq . files_for_commit.json; then
-              echo "Error processing files_for_commit.json"
-              exit 1
-            fi
-
             commit_message="Commit changes made by code formatters"
             files_for_commit="$(cat files_for_commit.json)"
             
