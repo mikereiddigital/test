@@ -231,6 +231,7 @@ runs:
 
             # Output the final JSON array
             echo "$files_for_commit" > files_for_commit.json
+            echo "Check the outputted json"
             cat files_for_commit.json  # Check the contents for validity
 
             # Error handling for `jq` output
