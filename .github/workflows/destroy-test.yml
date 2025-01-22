@@ -29,3 +29,4 @@ jobs:
                 echo "destroy_count=$destroy_count" >> $GITHUB_ENV
             else
                 echo "No resources to be destroyed"
+            fi
