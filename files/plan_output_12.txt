@@ -1,0 +1,90 @@
+Terraform will perform the following actions:
+
+  # aws_instance.web1 will be destroyed
+  - resource "aws_instance" "web1" {
+      - ami           = "ami-0abcd1234efgh5678" -> null
+      - instance_type = "t2.micro" -> null
+      - tags          = {
+          - "Name" = "web-server-1"
+        } -> null
+    }
+
+  # aws_instance.web2 will be destroyed
+  - resource "aws_instance" "web2" {
+      - ami           = "ami-0abcd1234ijkl5678" -> null
+      - instance_type = "t2.micro" -> null
+      - tags          = {
+          - "Name" = "web-server-2"
+        } -> null
+    }
+
+  # aws_instance.db1 will be destroyed
+  - resource "aws_instance" "db1" {
+      - ami           = "ami-0x1234abcd5678efgh" -> null
+      - instance_type = "t2.large" -> null
+      - tags          = {
+          - "Name" = "db-server-1"
+        } -> null
+    }
+
+  # aws_instance.app1 will be destroyed
+  - resource "aws_instance" "app1" {
+      - ami           = "ami-0abcd1234mnop5678" -> null
+      - instance_type = "t2.medium" -> null
+      - tags          = {
+          - "Name" = "app-server-1"
+        } -> null
+    }
+
+  # aws_instance.app2 will be destroyed
+  - resource "aws_instance" "app2" {
+      - ami           = "ami-0abcd1234qrst5678" -> null
+      - instance_type = "t2.medium" -> null
+      - tags          = {
+          - "Name" = "app-server-2"
+        } -> null
+    }
+
+  # aws_security_group.sg1 will be destroyed
+  - resource "aws_security_group" "sg1" {
+      - name        = "sg-allow-ssh" -> null
+      - description = "Allow SSH access" -> null
+    }
+
+  # aws_security_group.sg2 will be destroyed
+  - resource "aws_security_group" "sg2" {
+      - name        = "sg-allow-http" -> null
+      - description = "Allow HTTP access" -> null
+    }
+
+  # aws_s3_bucket.bucket1 will be destroyed
+  - resource "aws_s3_bucket" "bucket1" {
+      - bucket = "terraform-state-bucket" -> null
+    }
+
+  # aws_s3_bucket.bucket2 will be destroyed
+  - resource "aws_s3_bucket" "bucket2" {
+      - bucket = "application-data-bucket" -> null
+    }
+
+  # aws_s3_bucket.bucket3 will be destroyed
+  - resource "aws_s3_bucket" "bucket3" {
+      - bucket = "backup-data-bucket" -> null
+    }
+
+  # aws_lambda_function.lambda1 will be destroyed
+  - resource "aws_lambda_function" "lambda1" {
+      - function_name = "process-events" -> null
+    }
+
+  # aws_lambda_function.lambda2 will be destroyed
+  - resource "aws_lambda_function" "lambda2" {
+      - function_name = "generate-reports" -> null
+    }
+
+Plan: 0 to add, 0 to change, 12 to destroy.
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't specify an "-out" parameter to save this plan, so when you apply, Terraform 
+can't guarantee exactly what actions will be performed.
