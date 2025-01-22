@@ -25,11 +25,10 @@ jobs:
             destroy_count=$(echo "$file_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $8}')
             if [ "$destroy_count" -gt 0 ]; then
                 echo "Warning: There are $destroy_count resources to be destroyed in this plan."
-                echo "destroy_count=$destroy_count" >> $GITHUB_ENV
             else
                 echo "No resources to be destroyed"
             fi
-            echo $destroy_count >> $GITHUB_ENV
+            echo "destroy_count=$destroy_count" >> $GITHUB_ENV
 
       - name: Get Confirmation
         id: get_confirmation
