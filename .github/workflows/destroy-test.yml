@@ -45,8 +45,8 @@ jobs:
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-                const owner = "mikereiddigital-org";
-                const repo = test;
+                const owner = context.repo.owner;
+                const repo = context.repo.repo;
                 await github.rest.issues.createComment({
                     owner: owner,
                     repo: repo,
