@@ -9,7 +9,9 @@ permissions:
   pull-requests: write
 
 env:
-    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    DESTROY_THRESHOLD: 2
+    PLAN_FILE: plan_output.txt
 
 jobs:
   destroy:
@@ -22,10 +24,13 @@ jobs:
 
       - name: Get Plan Output
         id: get_plan_output
+        env:
+            DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
+            PLAN_FILE: ${{ env.PLAN_FILE }}
         run: |
-            file_content="$(cat files/plan_output.txt)"
+            file_content="$(cat files/$PLAN_FILE)"
             destroy_count=$(echo "$file_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $8}')
-            if [ "$destroy_count" -gt 0 ]; then
+            if [ "$destroy_count" -gt $DESTROY_THRESHOLD ]; then
                 echo "Warning: There are $destroy_count resources to be destroyed in this plan."
             else
                 echo "No resources to be destroyed"
@@ -38,6 +43,7 @@ jobs:
         uses: actions/github-script@v7.0.1
         env:
             DESTROY_COUNT: ${{ steps.get_plan_output.outputs.destroy_count }}
+            DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
@@ -47,6 +53,6 @@ jobs:
                     owner: owner,
                     repo: repo,
                     issue_number: context.payload.pull_request.number,
-                    body: `@${context.actor} Terraform plan evaluation detected changes to resources that require approval \n
-                    Guidance on approving these PRs is available at https://user-guide.modernisation-platform.service.justice.gov.uk/runbooks/reviewing-mp-environments-prs.html#process-for-approving-prs`
+                    body: `@${context.actor} Terraform plan evaluation detected the number of resoures to be destroyed is ${DESTROY_COUNT}  \n
+                    Please confirm if you want to proceed with the apply operation.`
                 });
