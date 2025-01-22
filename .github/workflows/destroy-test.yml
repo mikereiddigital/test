@@ -65,7 +65,7 @@ jobs:
 
             const {data: team_members} = await github.rest.teams.listMembersInOrg({
               org: context.repo.owner,
-              team_slug: 'team-slug' // Replace with your team slug
+              team_slug: 'Admin'
             });
 
             const teamMemberLogins = team_members.map(member => member.login);
