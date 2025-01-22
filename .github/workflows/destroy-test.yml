@@ -1,0 +1,32 @@
+name: Destroy Test
+
+on:
+  push:
+    branches:
+      - test3
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Plan Output
+        id: get_plan_output
+        run: |
+            file_content="$(cat /files/plan_output.txt)"
+            destroy_count=$(echo "$plan_output" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $6}')
+            echo $destroy_count
+            if [ "$destroy_count" -gt 0 ]; then
+                echo "Warning: There are $destroy_count resources to be destroyed in this plan."
+                echo "destroy_count=$destroy_count" >> $GITHUB_ENV
+            else
+                echo "No resources to be destroyed"
+            fi
