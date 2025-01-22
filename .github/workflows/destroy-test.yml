@@ -22,11 +22,10 @@ jobs:
         id: get_plan_output
         run: |
             file_content="$(cat files/plan_output.txt)"
-            destroy_count=$(echo "$plan_output" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $6}')
+            destroy_count=$(echo "$file_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $6}')
             echo $destroy_count
             if [ "$destroy_count" -gt 0 ]; then
                 echo "Warning: There are $destroy_count resources to be destroyed in this plan."
                 echo "destroy_count=$destroy_count" >> $GITHUB_ENV
             else
                 echo "No resources to be destroyed"
-            fi
