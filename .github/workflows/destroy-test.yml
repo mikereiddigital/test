@@ -37,3 +37,4 @@ jobs:
         run: |
             if [ $DESTROY_COUNT -gt 0 ]; then
                 echo "There are resources
+            fi
