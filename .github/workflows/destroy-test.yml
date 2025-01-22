@@ -46,8 +46,8 @@ jobs:
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
-                const owner = context.repo.owner;
-                const repo = context.repo.repo;
+                const owner = "mikereiddigital-org";
+                const repo = test;
                 await github.rest.issues.createComment({
                     owner: owner,
                     repo: repo,
@@ -56,3 +56,29 @@ jobs:
                     Terraform plan evaluation detected the number of resources to be destroyed is ${{ env.DESTROY_COUNT }} \n
                     Please confirm if you want to proceed with the apply operation.`
                 });
+
+                const {data: reviews} = await github.rest.pulls.listReviews({
+                pull_number: context.payload.pull_request.number
+                });
+
+                const {data: team_members} = await github.rest.teams.listMembersInOrg({
+                    org: orgName,
+                    team_slug: teamSlug
+                });
+
+                const teamMemberLogins = team_members.map(member => member.login);
+                const approved = reviews.some(review => review.state === 'APPROVED' && teamMemberLogins.includes(review.user.login));
+
+                if (approved) {
+                    core.notice('Pull request approved by a member of @ministryofjustice/modernisation-platform');
+                } 
+                else {
+                    core.setFailed('Terraform plan evaluation detected changes to resources that require approval from a member of team');
+                    await github.rest.pulls.createReview({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: context.payload.pull_request.number,
+                    event: 'REQUEST_CHANGES',
+                    body: 'Terraform plan evaluation detected changes to resources that require approval from owner - please contact owner for assistance'
+                    });
+                }
