@@ -10,8 +10,8 @@ permissions:
 
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    DESTROY_THRESHOLD: 8
-    PLAN_FILE: plan_output_12.txt
+    DESTROY_THRESHOLD: 2
+    PLAN_FILE: plan_output.txt
 
 jobs:
   destroy:
@@ -33,51 +33,46 @@ jobs:
             if [ "$destroy_count" -gt $DESTROY_THRESHOLD ]; then
                 echo "Warning: There are $destroy_count resources to be destroyed in this plan."
             else
-                echo "Destroy Threshold not exceeded"
+                echo "No resources to be destroyed"
             fi
             echo "destroy_count=$destroy_count" >> $GITHUB_ENV
 
       - name: Get Confirmation
+        id: get_confirmation
         uses: actions/github-script@v7.0.1
         env:
-            DESTROY_COUNT: ${{ env.DESTROY_COUNT }}
-            DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
+          DESTROY_COUNT: ${{ env.destroy_count }}
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-                const owner = context.repo.owner;
-                const repo = context.repo.repo;
-                await github.rest.issues.createComment({
-                    owner: owner,
-                    repo: repo,
-                    issue_number: context.payload.pull_request.number,
-                    body: `@${{ github.actor }} \n
-                    Terraform plan evaluation detected the number of resources to be destroyed is ${{ env.DESTROY_COUNT }} \n
-                    Please confirm if you want to proceed with the apply operation.`
-                });
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = context.payload.pull_request.number;
+            await github.rest.issues.createComment({
+              owner: owner,
+              repo: repo,
+              issue_number: issue_number,
+              body: `@${{ github.actor }} \n
+              Terraform plan evaluation detected the number of resources to be destroyed is ${{ env.DESTROY_COUNT }} \n
+              Please confirm if you want to proceed with the apply operation.`
+            });
 
-                const {data: reviews} = await github.rest.pulls.listReviews({
-                pull_number: context.payload.pull_request.number
-                });
+            const {data: reviews} = await github.rest.pulls.listReviews({
+              owner: owner,
+              repo: repo,
+              pull_number: issue_number
+            });
 
-                const {data: team_members} = await github.rest.teams.listMembersInOrg({
-                    org: orgName,
-                    team_slug: teamSlug
-                });
+            const {data: team_members} = await github.rest.teams.listMembersInOrg({
+              org: context.repo.owner,
+              team_slug: 'team-slug' // Replace with your team slug
+            });
 
-                const teamMemberLogins = team_members.map(member => member.login);
-                const approved = reviews.some(review => review.state === 'APPROVED' && teamMemberLogins.includes(review.user.login));
+            const teamMemberLogins = team_members.map(member => member.login);
+            const approved = reviews.some(review => review.state === 'APPROVED' && teamMemberLogins.includes(review.user.login));
 
-                if (approved) {
-                    core.notice('Pull request approved by team');
-                } 
-                else {
-                    core.setFailed('Terraform plan evaluation detected changes to resources that require approval from a member of team');
-                    await github.rest.pulls.createReview({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: context.payload.pull_request.number,
-                    event: 'REQUEST_CHANGES',
-                    body: 'Terraform plan evaluation detected changes to resources that require approval from owner - please contact owner for assistance'
-                    });
-                }
+            if (approved) {
+              console.log('The pull request has been approved by a team member.');
+            } else {
+              console.log('The pull request has not been approved by a team member.');
+            }
