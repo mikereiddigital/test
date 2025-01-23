@@ -27,7 +27,8 @@ jobs:
         env:
           PLAN_FILE: ${{ env.PLAN_FILE }}
         run: |
-          plan_summary=$(cat files/$PLAN_FILE | tr '\n' ' ' | tr -d '\r')
+          plan_output=$(cat files/$PLAN_FILE | tr '\n' ' ' | tr -d '\r')
+          plan_summary=$(echo "$plan_output" | grep -E 'Plan:|No changes. Your infrastructure matches the configuration.')
           echo "::add-mask::$plan_summary"
           echo "plan_summary=$plan_summary" >> $GITHUB_ENV
       
