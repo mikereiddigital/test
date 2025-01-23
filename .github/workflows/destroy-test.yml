@@ -28,14 +28,24 @@ jobs:
             DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
             PLAN_FILE: ${{ env.PLAN_FILE }}
         run: |
-            file_content="$(cat files/$PLAN_FILE)"
-            destroy_count=$(echo "$file_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $8}')
-            if [ "$destroy_count" -gt $DESTROY_THRESHOLD ]; then
+            plan_content="$(cat files/$PLAN_FILE)"
+            destroy_count=$(echo "$plan_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $8}')
+            if ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
+                echo "Invalid destroy_count value: $destroy_count"
+                exit 1
+            fi
+            if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
+                echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
+                exit 1
+            fi
+            if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
                 echo "Warning: There are $destroy_count resources to be destroyed in this plan."
+            elif [ "$destroy_count" -gt 0 ]; then
+                echo "There are $destroy_count resources to be destroyed, which is below the threshold."
             else
                 echo "No resources to be destroyed"
             fi
-            echo "DESTROY_COUNT=$destroy_count" >> $GITHUB_ENV
+            echo "destroy_count=$destroy_count" >> $GITHUB_ENV
 
 
       - name: Get Confirmation
