@@ -48,7 +48,7 @@ jobs:
             script: |
                 const owner = context.repo.owner;
                 const repo = context.repo.repo;
-                if ${{ env.DESTROY_COUNT }} > ${{ env.DESTROY_THRESHOLD }} 
+                if (destroyCount > destroyThreshold) {
                     await github.rest.issues.createComment({
                         owner: owner,
                         repo: repo,
@@ -57,4 +57,4 @@ jobs:
                         Terraform plan evaluation detected the number of resources to be destroyed is ${{ env.DESTROY_COUNT }} \n
                         Please confirm if you want to proceed with the apply operation.`
                     });
-                fi
+                }
