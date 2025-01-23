@@ -24,6 +24,8 @@ jobs:
 
       - name: Get Plan Summary
         id: get_plan_summary
+        env:
+          PLAN_FILE: ${{ env.PLAN_FILE }}
         run: |
           plan_summary=$(cat files/$PLAN_FILE)
           echo "plan_summary=$plan_summary" >> $GITHUB_ENV
