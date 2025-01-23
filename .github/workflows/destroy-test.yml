@@ -48,7 +48,7 @@ jobs:
             script: |
                 const owner = context.repo.owner;
                 const repo = context.repo.repo;
-                if (destroyCount > destroyThreshold) {
+                if (DESTROY_COUNT > DESTROY_THRESHOLD) {
                     await github.rest.issues.createComment({
                         owner: owner,
                         repo: repo,
