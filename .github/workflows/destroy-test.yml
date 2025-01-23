@@ -85,7 +85,7 @@ jobs:
                         repo: repo,
                         issue_number: context.payload.pull_request.number,
                         body: `@${{ github.actor }}  Warning - Large Number of Resources to be Destroyed. \n
-                        Terraform plan evaluation detected the number of resources to be destroyed is ${destroyCount} \n
+                        Terraform plan evaluation has detected the number of resources to be destroyed is ${destroyCount}. \n
                         Please check the plan output & confirm if you want to proceed with the apply operation.`
                     });
                 }
