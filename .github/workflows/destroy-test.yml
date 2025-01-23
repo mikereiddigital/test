@@ -69,8 +69,8 @@ jobs:
       - name: Get Confirmation
         uses: actions/github-script@v7.0.1
         env:
-            DESTROY_COUNT: ${{ ENV.DESTROY_COUNT }}
-            DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
+            DESTROY_COUNT: ${{ env }}
+            DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
             script: |
