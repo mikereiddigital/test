@@ -29,6 +29,7 @@ jobs:
         run: |
           plan_summary=$(cat files/$PLAN_FILE)
           echo "plan_summary=$plan_summary" >> $GITHUB_ENV
+      
 
       - name: Get Destroy Count
         id: get_destroy_count
