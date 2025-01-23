@@ -10,7 +10,7 @@ permissions:
 
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    DESTROY_THRESHOLD: 2
+    TF_DESTROY_THRESHOLD: 2
     PLAN_FILE: plan_output.txt
 
 jobs:
@@ -22,30 +22,45 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Get Plan Output
-        id: get_plan_output
-        env:
-            DESTROY_THRESHOLD: ${{ env.DESTROY_THRESHOLD }}
-            PLAN_FILE: ${{ env.PLAN_FILE }}
+      - name: Get Plan Summary
+        id: get_plan_summary
         run: |
-            plan_content="$(cat files/$PLAN_FILE)"
-            destroy_count=$(echo "$plan_content" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy' | awk '{print $8}')
-            if ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
-                echo "Invalid destroy_count value: $destroy_count"
-                exit 1
-            fi
-            if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
-                echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
-                exit 1
-            fi
-            if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
-                echo "Warning: There are $destroy_count resources to be destroyed in this plan."
-            elif [ "$destroy_count" -gt 0 ]; then
-                echo "There are $destroy_count resources to be destroyed, which is below the threshold."
-            else
-                echo "No resources to be destroyed"
-            fi
-            echo "destroy_count=$destroy_count" >> $GITHUB_ENV
+          plan_summary=$(cat files/$PLAN_FILE)
+          echo "plan_summary=$plan_summary" >> $GITHUB_ENV
+
+      - name: Get Destroy Count
+        id: get_destroy_count
+        env:
+          DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
+          PLAN_SUMMARY: ${{ env.plan_summary }}
+        run: |
+  
+          destroy_count=$(echo "$PLAN_SUMMARY" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy.' | awk '{print $8}')
+ 
+          echo "destroy_count=$destroy_count"
+
+          if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
+              echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
+              exit 1
+          fi
+
+          if echo "$PLAN_SUMMARY" | grep -q "No changes. Your infrastructure matches the configuration."; then
+              echo "No changes. Your infrastructure matches the configuration."
+              destroy_count=0
+          elif
+              ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
+                  echo "Invalid destroy_count value: $destroy_count"
+                  exit 1
+          fi
+
+          if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
+              echo "Warning: There are $destroy_count resources to be destroyed in this plan."
+          elif [ "$destroy_count" -gt 0 ]; then
+              echo "There are $destroy_count resources to be destroyed, which is below the threshold."
+          else
+              echo "No resources to be destroyed"
+          fi
+          echo "destroy_count=$destroy_count" >> $GITHUB_ENV
 
 
       - name: Get Confirmation
