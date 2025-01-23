@@ -27,7 +27,7 @@ jobs:
         env:
           PLAN_FILE: ${{ env.PLAN_FILE }}
         run: |
-          plan_summary=$(cat files/$PLAN_FILE)
+          plan_summary=$(cat files/$PLAN_FILE | tr '\n' ' ' | tr -d '\r')
           echo "plan_summary=$plan_summary" >> $GITHUB_ENV
       
 
