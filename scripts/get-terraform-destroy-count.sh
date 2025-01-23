@@ -15,6 +15,7 @@ fi
 
 destroy_count=$(echo "$PLAN_SUMMARY" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy.' | awk '{print $8}')
 
+echo "destroy_threshold=$DESTROY_THRESHOLD"
 echo "destroy_count=$destroy_count"
 
 if echo "$PLAN_SUMMARY" | grep -q "No changes. Your infrastructure matches the configuration."; then
