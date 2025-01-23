@@ -64,14 +64,13 @@ jobs:
           else
               echo "No resources to be destroyed"
           fi
-          echo "::set-output name=destroy_count::$destroy_count"
+          echo "destroy_count=$destroy_count" >> $GITHUB_ENV
 
 
       - name: Get Confirmation
-        if: ${{ steps.get_destroy_count.outputs.destroy_count > env.TF_DESTROY_THRESHOLD }}
         uses: actions/github-script@v7.0.1
         env:
-            DESTROY_COUNT: ${{ steps.get_destroy_count.outputs.destroy_count }}
+            DESTROY_COUNT: ${{ env.destroy_count }}
             DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
         with:
             github-token: ${{ secrets.GITHUB_TOKEN }}
