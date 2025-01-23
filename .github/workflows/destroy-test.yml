@@ -1,0 +1,66 @@
+name: Destroy Test
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
+
+env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    TF_DESTROY_THRESHOLD: 4
+    PLAN_FILE: plan_output_12.txt
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Plan Summary
+        id: get_plan_summary
+        env:
+          PLAN_FILE: ${{ env.PLAN_FILE }}
+        run: |
+          plan_output=$(cat files/$PLAN_FILE | tr '\n' ' ' | tr -d '\r')
+          plan_summary=$(echo "$plan_output" | grep -E 'Plan:|No changes. Your infrastructure matches the configuration.')
+          echo "::add-mask::$plan_summary"
+          echo "plan_summary=$plan_summary" >> $GITHUB_ENV
+      
+
+      - name: Get Destroy Count
+        id: get_destroy_count
+        env:
+          DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
+          PLAN_SUMMARY: ${{ env.plan_summary }}
+        run: |
+            bash scripts/get-terraform-destroy-count.sh
+
+
+      - name: Get Confirmation
+        uses: actions/github-script@v7.0.1
+        env:
+            DESTROY_COUNT: ${{ env.destroy_count }}
+            DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+                const owner = context.repo.owner;
+                const repo = context.repo.repo;
+                const destroyCount = parseInt(process.env.DESTROY_COUNT, 10);
+                const destroyThreshold = parseInt(process.env.DESTROY_THRESHOLD, 10);
+                if (destroyCount > destroyThreshold) {
+                    await github.rest.issues.createComment({
+                        owner: owner,
+                        repo: repo,
+                        issue_number: context.payload.pull_request.number,
+                        body: `@${{ github.actor }}  Warning - Large Number of Resources to be Destroyed. \n
+                        Terraform plan evaluation has detected the number of resources to be destroyed is ${destroyCount}. \n
+                        Please check the plan output & confirm if you want to proceed with the apply operation.`
+                    });
+                }
