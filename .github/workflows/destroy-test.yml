@@ -11,7 +11,7 @@ permissions:
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     TF_DESTROY_THRESHOLD: 4
-    PLAN_FILE: plan_output_12.txt
+    PLAN_FILE: plan_output.txt
 
 jobs:
   destroy:
