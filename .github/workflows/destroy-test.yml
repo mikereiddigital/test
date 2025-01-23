@@ -39,32 +39,7 @@ jobs:
           DESTROY_THRESHOLD: ${{ env.TF_DESTROY_THRESHOLD }}
           PLAN_SUMMARY: ${{ env.plan_summary }}
         run: |
-  
-          destroy_count=$(echo "$PLAN_SUMMARY" | grep -oE 'Plan: [0-9]+ to add, [0-9]+ to change, [0-9]+ to destroy.' | awk '{print $8}')
- 
-          echo "destroy_count=$destroy_count"
-
-          if echo "$PLAN_SUMMARY" | grep -q "No changes. Your infrastructure matches the configuration."; then
-              echo "No changes. Your infrastructure matches the configuration."
-              destroy_count=0
-          fi
-
-          if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
-            echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
-            exit 1
-          elif ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
-            echo "Invalid destroy_count value: $destroy_count"
-            exit 1
-          fi
-
-          if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
-            echo "Warning: There are $destroy_count resources to be destroyed in this plan."
-          elif [ "$destroy_count" -gt 0 ]; then
-              echo "There are $destroy_count resources to be destroyed, which is below the set threshold of $DESTROY_THRESHOLD."
-          else
-              echo "No resources to be destroyed"
-          fi
-          echo "destroy_count=$destroy_count" >> $GITHUB_ENV
+            bash scripts/get-terraform-destroy-count.sh
 
 
       - name: Get Confirmation
