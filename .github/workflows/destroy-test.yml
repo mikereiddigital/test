@@ -60,7 +60,7 @@ jobs:
           if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
             echo "Warning: There are $destroy_count resources to be destroyed in this plan."
           elif [ "$destroy_count" -gt 0 ]; then
-              echo "There are $destroy_count resources to be destroyed, which is below the set threshold."
+              echo "There are $destroy_count resources to be destroyed, which is below the set threshold of $DESTROY_THRESHOLD."
           else
               echo "No resources to be destroyed"
           fi
