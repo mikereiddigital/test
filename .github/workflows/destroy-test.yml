@@ -56,23 +56,3 @@ jobs:
               Terraform plan evaluation detected the number of resources to be destroyed is ${{ env.DESTROY_COUNT }} \n
               Please confirm if you want to proceed with the apply operation.`
             });
-
-            # const {data: reviews} = await github.rest.pulls.listReviews({
-            #   owner: owner,
-            #   repo: repo,
-            #   pull_number: issue_number
-            # });
-
-            # const {data: team_members} = await github.rest.teams.listMembersInOrg({
-            #   org: context.repo.owner,
-            #   team_slug: 'Admin'
-            # });
-
-            # const teamMemberLogins = team_members.map(member => member.login);
-            # const approved = reviews.some(review => review.state === 'APPROVED' && teamMemberLogins.includes(review.user.login));
-
-            # if (approved) {
-            #   console.log('The pull request has been approved by a team member.');
-            # } else {
-            #   console.log('The pull request has not been approved by a team member.');
-            # }
