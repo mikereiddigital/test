@@ -42,24 +42,23 @@ jobs:
  
           echo "destroy_count=$destroy_count"
 
-          if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
-              echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
-              exit 1
-          fi
-
           if echo "$PLAN_SUMMARY" | grep -q "No changes. Your infrastructure matches the configuration."; then
               echo "No changes. Your infrastructure matches the configuration."
               destroy_count=0
-          elif
-              ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
-                  echo "Invalid destroy_count value: $destroy_count"
-                  exit 1
+          fi
+
+          if ! [[ "$DESTROY_THRESHOLD" =~ ^[0-9]+$ ]]; then
+            echo "Invalid DESTROY_THRESHOLD value: $DESTROY_THRESHOLD"
+            exit 1
+          elif ! [[ "$destroy_count" =~ ^[0-9]+$ ]]; then
+            echo "Invalid destroy_count value: $destroy_count"
+            exit 1
           fi
 
           if [ "$destroy_count" -gt "$DESTROY_THRESHOLD" ]; then
-              echo "Warning: There are $destroy_count resources to be destroyed in this plan."
+            echo "Warning: There are $destroy_count resources to be destroyed in this plan."
           elif [ "$destroy_count" -gt 0 ]; then
-              echo "There are $destroy_count resources to be destroyed, which is below the threshold."
+              echo "There are $destroy_count resources to be destroyed, which is below the set threshold."
           else
               echo "No resources to be destroyed"
           fi
